@@ -44,7 +44,6 @@ io.on('connection', (socket) => {
   });
 });
 
-//recordeu de canviar el port del socket!!!
 server.listen(3189, () => {
   console.log('Server running at http://localhost:3189');
 });

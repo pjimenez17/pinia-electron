@@ -40,7 +40,7 @@ export default {
 
                 this.$router.push('/votacions');
             } else {
-                window.alert('Inicia sesion 🫵');
+                window.alert('¡Inicia sesion!');
             }
         },
     },

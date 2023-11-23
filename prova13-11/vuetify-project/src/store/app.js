@@ -29,4 +29,5 @@ export const useAppStore = defineStore('app', {
       return this.loginInfo;
     }
   },
+  persist: true
 })

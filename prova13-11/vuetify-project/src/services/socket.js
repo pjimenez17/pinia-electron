@@ -1,9 +1,12 @@
-// socket.js
 import { io } from 'socket.io-client';
+import { useAppStore } from '@/store/app';
 
-const socket = io('http://localhost:3189'); // Asegúrate de utilizar la URL correcta del servidor
+const URL = process.env.NODE_ENV === "production" ? "http://localhost:3198" : "http://localhost:3198"
 
-export function emitVotacio(opcion) {
-  socket.emit('votacio', opcion);
-}
+export const socket = io('http://localhost:3189');
+
+socket.on("actualizacioVotacions", (newVotos) =>{
+  const store = useAppStore();
+  store.setVotos(newVotos)
+})
 
