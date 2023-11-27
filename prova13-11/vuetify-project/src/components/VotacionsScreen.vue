@@ -12,7 +12,6 @@
             <v-btn @click="votar(3)">Votar Opción 4</v-btn>
           </v-card-text>
 
-          <!-- Puedes mostrar los resultados aquí -->
           <v-card-text>
             <p>Resultados:</p>
             <v-list>
@@ -21,7 +20,9 @@
               </v-list-item>
             </v-list>
           </v-card-text>
-          <PieChart :data="chartData" />
+          <div style="height: 400px;"> <!-- Ajusta la altura según sea necesario -->
+            <Pie :data="data" :options="chartOptions" />
+          </div>
         </v-card>
       </v-col>
     </v-row>
@@ -31,11 +32,15 @@
 <script>
 import { useAppStore } from "@/store/app";
 import { socket } from "@/services/socket";
-import PieChart from "@/components/PieChart";
+import { Pie } from "vue-chartjs";
+import { generateChartData, chartOptions } from "@/components/chartConfig";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default {
   components: {
-    PieChart,
+    Pie
   },
   mounted() {
     const store = useAppStore();
@@ -59,22 +64,17 @@ export default {
       socket.emit("votacio", opcion);
     },
   },
-  computed: {
-    votos() {
+  
+    computed: {
+      votos() {
       return useAppStore().getVotos();
     },
-    chartData() {
-      return {
-        labels: ["Opción 1", "Opción 2", "Opción 3", "Opción 4"],
-        datasets: [
-          {
-            data: this.votos,
-            backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4CAF50"],
-            hoverBackgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4CAF50"],
-          },
-        ],
-      };
+    data() {
+      return generateChartData();
     },
+    chartOptions() {
+      return chartOptions;
+    }
   },
 };
 </script>

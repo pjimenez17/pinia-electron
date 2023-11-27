@@ -1,3 +1,4 @@
+import history from 'connect-history-api-fallback';
 import express from 'express';
 import cors from 'cors';
 import { createServer } from 'node:http';
@@ -15,6 +16,13 @@ const io = new Server(server,{
     origin: '*', 
     methods: ['GET', 'POST'],
   }
+});
+
+app.use(express.static('./dist'))
+
+
+app.get('/', (req, res) => {
+  res.sendFile(new URL('./dist/index.html').pathname);
 });
 
 io.on('connection', (socket) => {
@@ -47,3 +55,13 @@ io.on('connection', (socket) => {
 server.listen(3189, () => {
   console.log('Server running at http://localhost:3189');
 });
+
+
+const staticFileMiddleware = express.static("./dist")
+app.use(staticFileMiddleware)
+app.use(history({
+  disableDotRule: true,
+  verbose: true
+}))
+
+app.use(staticFileMiddleware)
